@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:replace="components :: .basicHeaders"></th:block>
+    <link rel="stylesheet" href="/css/menu_admin.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <header th:replace="components :: header"></header>
+    <main class="page-main">
+        <div class="menu-item-context">
+            <div class="menu h-100">
+                <div style="text-align: center">
+                    <h1>Menu</h1>
+                    <button class="add-item-button btn" onclick="addListItem()">Add new course</button>
+                </div>
+                <div class="menu-list">
+                    <th:block th:each="course : ${courses}">
+                        <div class="menu-item">
+                            <div class="row">
+                                <div class="col-7 menu-item-name">
+                                    <h1 th:text="${course.name}">coursename</h1>
+                                </div>
+                                <div class="col-2 menu-item-price">
+                                    <span th:text="'$'+${course.price}">course price</span>
+                                </div>
+                                <div class="col-3 menu-item-settings">
+                                    <a class="edit" th:attr="onclick=|modifyListItem(${course.id})|"><i
+                                            class="fas fa-pen"></i></a>
+                                    <a class="delete" th:attr="onclick=|deleteItemFromList(${course.id})|"><i
+                                            class="fas fa-minus"></i></i></a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 menu-item-description">
+                                    <span th:text="${course.description}">course description</span>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="components :: footer"></footer>
+</div>
+
+<div class="modal fade" id="course-modification-modal" tabindex="-1" role="dialog"
+     aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Menu modification</h5>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="course-modification-modal-body">
+                <form th:action="@{/menu}" th:object="${editedCourse}" method="post" id="course-modification-form">
+                    <div class="messages"></div>
+                    <div class="controls" id="login-form-elements">
+                        <input type="number" th:field="*{id}" id="id" name="id" style="display: none">
+                        <div class="form-group" id="name-group">
+                            <label for="name">Name</label>
+                            <input th:classappend="${#fields.hasErrors('name')}? 'is-invalid':''"
+                                   th:field="*{name}" placeholder="Type in the name of the course"
+                                   id="name" type="text" name="name" class="form-control"
+                                   autocomplete="new-userName">
+
+                            <div class="help-block with-errors"></div>
+                            <div class="invalid-feedback" th:each="error : ${#fields.errors('name')}"
+                                 th:text="${error}">Validation error
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="password-group">
+                            <label for="description">Description</label>
+                            <input id="description" type="text" name="description" class="form-control"
+                                   th:classappend="${#fields.hasErrors('description')}? 'is-invalid':''"
+                                   placeholder="Type in the description of course" th:field="*{description}">
+                            <div class="help-block with-errors"></div>
+                            <div class="invalid-feedback" th:each="error : ${#fields.errors('description')}"
+                                 th:text="${error}">Validation error
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="price-group">
+                            <label for="description">Price</label>
+                            <input id="price" type="number" name="price" class="form-control"
+                                   th:classappend="${#fields.hasErrors('price')}? 'is-invalid':''"
+                                   placeholder="Type in the price of course" th:field="*{price}">
+                            <div class="help-block with-errors"></div>
+                            <div class="invalid-feedback" th:each="error : ${#fields.errors('price')}"
+                                 th:text="${error}">Validation error
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="course-modification-submit" form="course-modification-form"
+                        class="btn btn-primary course-modification-submit">
+                    Send
+                </button>
+                <button type="button" class="btn btn-secondary" id="login-close"
+                        data-dismiss="modal">Cancel
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="module" src="/js/menu_admin.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/js/all.min.js"></script>
+<script>
+    function deleteItemFromList(id) {
+        const deleteFromMenuList = new CustomEvent('deleteFromMenuList', {
+            bubbles: true,
+            detail: {
+                id: id
+            }
+        });
+        document.querySelector(".menu-list").dispatchEvent(deleteFromMenuList);
+    }
+
+    function modifyListItem(id) {
+        const modifyListItem = new CustomEvent('modifyListItem', {
+            bubbles: true,
+            detail: {
+                id: id
+            }
+        });
+        document.querySelector(".menu-list").dispatchEvent(modifyListItem);
+    }
+
+    function addListItem() {
+        const addListItem = new CustomEvent('addListItem', {
+            bubbles: true
+        });
+        document.querySelector(".menu-list").dispatchEvent(addListItem);
+    }
+
+</script>
+<th:block th:replace="components :: .basicScripts"></th:block>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:replace="components :: .basicHeaders"></th:block>
+    <link rel="stylesheet" href="/css/menu.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <header th:replace="components :: header"></header>
+    <main class="page-main">
+        <div class="row menu-item-context">
+            <div class="col-sm-12 col-md-8 col-lg-8 h-100 menu">
+                <!--                <span style="font-size: 40px; margin: auto">MENU</span>-->
+                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;
+                margin-bottom: 50px">
+                    <label for="courseInput" style="margin-right: 10px; margin-bottom: 0px;">Coursename: </label>
+                    <input id="courseInput" type="text" name="courseToSearch" class="form-control"
+                           placeholder="Start typing the course to search for">
+                </div>
+                <div class="menu-list">
+                    <th:block th:each="course : ${courses}">
+                        <div class="menu-item">
+                            <div class="row">
+                                <div class="col-8 menu-item-name">
+                                    <h1 th:text="${course.name}">coursename</h1>
+                                </div>
+                                <div class="col-2 menu-item-price">
+                                    <span th:text="'$'+${course.price}">course price</span>
+
+                                </div>
+                                <div class="col-1 menu-item-add">
+                                    <a th:attr="onclick=|addItemToCart('${course.name}', '${course.price}')|"
+                                       style="cursor: pointer">+</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 menu-item-description">
+                                    <span th:text="${course.description}">course price</span>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4 h-100"
+                 style="padding-left: 2px; display: flex; flex-direction: column">
+                <div class="shopping-item-context">
+                    <div class="shopping-list">
+                        <th:block th:each="shoppingItem, iStat : ${shoppingCart}">
+                            <div class="row">
+                                <div class="col-7 shopping-item-name"
+                                     th:text="${shoppingItem[0]}">
+                                    shoppingItem
+                                </div>
+                                <div class="col-3 shopping-item-price"
+                                     th:text="${shoppingItem[1]}" style="text-align: right;">
+                                    shoppingPrice
+                                </div>
+                                <div class="col-2 shopping-item-remove">
+                                    <a th:attr="onclick=|removeItemFromCart(${iStat.index}, ${shoppingItem[1].replace('$','')})|"
+                                       style="cursor: pointer">-</a>
+
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="total">
+                        <span th:if="${total!=null}" th:text="'$'+${total}">Total</span>
+                        <span th:if="${total==null}">$ 0.0</span>
+                    </div>
+                </div>
+                <div class="coupon-upload"
+                     style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;
+                     align-items: center;">
+
+                    <form th:action="@{/menu/couponCode}" th:object="${couponCode}" method="post" id="coupon-form">
+                        <div class="controls" id="login-form-elements">
+                            <div class="form-group" id="coupon-code-group">
+                                <label for="coupon-code" style="margin-right: 10px; margin-bottom: 0px;">Coupon
+                                    code: </label>
+                                <input th:classappend="${#fields.hasErrors('code')}? 'is-invalid':''"
+                                       th:field="*{code}" placeholder="Enter coupon code here"
+                                       id="coupon-code" type="text" name="code" class="form-control"
+                                >
+
+                                <div class="help-block with-errors"></div>
+                                <div class="invalid-feedback" th:each="error : ${#fields.errors('code')}"
+                                     th:text="${error}">Validation error
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="coupon-code-btn" class="btn">
+                        Send
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<footer th:replace="components :: footer"></footer>
+
+
+</div>
+<th:block th:replace="components :: .basicScripts"></th:block>
+<script type="module" src="/js/menu.js"></script>
+<script>
+
+    function addItemToCart(itemName, itemPrice) {
+        const addToShoppingCartEvent = new CustomEvent('addToShoppingcart', {
+            bubbles: true,
+            detail: {
+                itemName: itemName,
+                itemPrice: itemPrice
+            }
+        });
+        document.querySelector(".menu-list").dispatchEvent(addToShoppingCartEvent);
+    }
+
+    function removeItemFromCart(index, itemPrice) {
+        const removeFromShoppingCartEvent = new CustomEvent('removeFromShoppingcart', {
+            bubbles: true,
+            detail: {
+                index: index,
+                itemPrice: itemPrice
+            }
+        });
+        document.querySelector(".menu-list").dispatchEvent(removeFromShoppingCartEvent);
+    }
+</script>
+</body>
+</html>

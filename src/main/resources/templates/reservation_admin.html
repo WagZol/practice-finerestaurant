@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:replace="components :: .basicHeaders"></th:block>
+    <link rel="stylesheet" href="/css/reservation_admin.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <header th:replace="components :: header"></header>
+    <main class="page-main">
+        <div class="reservation-item-context">
+            <div class="reservation h-100">
+                <div style="text-align: center">
+                    <h1>Reservations</h1>
+                    <button class="add-item-button btn" onclick="addListItem()">Add new reservation</button>
+                </div>
+                <div class="reservation-list">
+                    <th:block th:each="reservation : ${reservations}">
+                        <div class="reservation-item">
+                            <div class="row">
+                                <div class="col-4 reservation-item-name">
+                                    <h1 th:text="${reservation.name}">reservation name</h1>
+                                </div>
+                                <div class="col-3 reservation-item-date">
+                                    <input type="datetime-local" th:value="${reservation.date}" disabled/>
+                                    <time th:text="${reservation.date}">time</time>
+                                </div>
+                                <div class="col-2 reservation-item-seats">
+                                    <span th:text="${reservation.seats}">reservation seats</span>
+                                </div>
+                                <div class="col-3 reservation-item-settings">
+                                    <a class="edit" th:attr="onclick=|modifyListItem(${reservation.id})|"><i
+                                            class="fas fa-pen"></i></a>
+                                    <a class="delete" th:attr="onclick=|deleteListItem(${reservation.id})|"><i
+                                            class="fas fa-minus"></i></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="components :: footer"></footer>
+</div>
+
+<div class="modal fade" id="reservation-modification-modal" tabindex="-1" role="dialog"
+     aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reservationModalLabel">Reservation modification</h5>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="reservation-modification-modal-body">
+                <form th:action="@{/reservation}" th:object="${editedReservation}" method="post" id="reservation-modification-form">
+                    <div class="messages"></div>
+                    <div class="controls" id="reservation-form-elements">
+                        <input type="number" th:field="*{id}" id="id" name="id" style="display: none">
+                        <div class="form-group" id="name-group">
+                            <label for="name">Name</label>
+                            <input th:classappend="${#fields.hasErrors('name')}? 'is-invalid':''"
+                                   th:field="*{name}" placeholder="Enter the name to which you are reserve for"
+                                   id="name" type="text" name="name" class="form-control"
+                                   autocomplete="new-userName">
+
+                            <div class="help-block with-errors"></div>
+                            <div class="invalid-feedback" th:each="error : ${#fields.errors('name')}"
+                                 th:text="${error}">Validation error
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="date-group">
+                            <label for="date">Date</label>
+                            <input id="date" type="datetime-local" name="date" class="form-control"
+                                   th:classappend="${#fields.hasErrors('date')}? 'is-invalid':''"
+                                   th:field="*{date}" step="3600">
+                            <div class="help-block with-errors"></div>
+                            <div class="invalid-feedback" th:each="error : ${#fields.errors('date')}"
+                                 th:text="${error}">Validation error
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="price-group">
+                            <label for="seats">Seats</label>
+                            <input id="seats" type="number" name="seats" class="form-control"
+                                   th:classappend="${#fields.hasErrors('seats')}? 'is-invalid':''"
+                                   placeholder="Enter number of seats to reserve" th:field="*{seats}">
+                            <div class="help-block with-errors"></div>
+                            <div class="invalid-feedback" th:each="error : ${#fields.errors('seats')}"
+                                 th:text="${error}">Validation error
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="reservation-modification-submit" form="reservation-modification-form"
+                        class="btn btn-primary reservation-modification-submit">
+                    Send
+                </button>
+                <button type="button" class="btn btn-secondary" id="reservation-close"
+                        data-dismiss="modal">Cancel
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="module" src="/js/reservation_admin.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/js/all.min.js"></script>
+<script>
+    function deleteListItem(id) {
+        const deleteListItem = new CustomEvent('deleteFromList', {
+            bubbles: true,
+            detail: {
+                id: id
+            }
+        });
+        document.querySelector(".reservation-list").dispatchEvent(deleteListItem);
+    }
+
+    function modifyListItem(id) {
+        const modifyListItem = new CustomEvent('modifyListItem', {
+            bubbles: true,
+            detail: {
+                id: id
+            }
+        });
+        document.querySelector(".reservation-list").dispatchEvent(modifyListItem);
+    }
+
+    function addListItem() {
+        const addListItem = new CustomEvent('addListItem', {
+            bubbles: true
+        });
+        document.querySelector(".reservation-list").dispatchEvent(addListItem);
+    }
+
+</script>
+<th:block th:replace="components :: .basicScripts"></th:block>
+</body>
+</html>

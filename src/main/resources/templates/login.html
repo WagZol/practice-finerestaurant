@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.css"/>
+
+    <link rel="stylesheet" href="/css/login.css"/>
+
+    <title>Q</title>
+</head>
+<body>
+<main class="page-main">
+    <div class="login-container">
+        <div id="logo">
+            <span>Q</span>
+        </div>
+        <form th:action="@{/login}" th:object="${userToLogin}" method="post" id="login-form">
+            <div class="controls" id="login-form-elements">
+                <div class="form-group" id="username-group">
+                    <label for="username">Email</label>
+                    <input th:classappend="${#fields.hasErrors('username')}? 'is-invalid':''"
+                           th:field="*{username}" placeholder=""
+                           id="username" type="text" name="username" class="form-control"
+                           autocomplete="new-userName">
+
+                    <div class="help-block with-errors"></div>
+                    <div class="invalid-feedback" th:each="error : ${#fields.errors('username')}"
+                         th:text="${error}">Validation error
+                    </div>
+                </div>
+
+                <div class="form-group" id="password-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" class="form-control"
+                           th:classappend="${#fields.hasErrors('password')}? 'is-invalid':''"
+                           th:field="*{password}"
+                           autocomplete="new-password">
+                    <div class="help-block with-errors"></div>
+                    <div class="invalid-feedback" th:each="error : ${#fields.errors('password')}"
+                         th:text="${error}">Validation error
+                    </div>
+                </div>
+                <div class="login-footer">
+                    <button type="submit" id="login-submit" class="btn login-btn">
+                        Login
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</main>
+
+
+<script src="/webjars/jquery/jquery.js"></script>
+<script src="/webjars/bootstrap/js/bootstrap.js"></script>
+<script src="/js/login.js"></script>
+
+</body>
+</html>

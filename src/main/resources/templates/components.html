@@ -1,0 +1,94 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+<head>
+    <th:block class="basicHeaders">
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.css}"/>
+        <title>QualityRestaurant</title>
+    </th:block>
+
+    <!-- Font -->
+    <!--    <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap" rel="stylesheet">-->
+
+
+
+</head>
+<header class="page-header">
+    <nav>
+        <h2 class="logo">Q</h2>
+        <ul>
+            <li>
+                <a href="menu">menu</a>
+            </li>
+            <li>
+                <a href="reservation">reservations</a>
+            </li>
+            <li>
+                <a href="about">about us</a>
+            </li>
+        </ul>
+        <button class="cta-contact">logout</button>
+    </nav>
+</header>
+<main class="page-main">
+    <div>
+        <div class="text-wrapper">
+            <h1>Quality restaurant</h1>
+        </div>
+        <div class="text-wrapper p-wrapper">
+            <p>The least is to give the best...</p>
+        </div>
+        <!--        <div class="text-wrapper p-wrapper">-->
+        <!--            <p>It wasn't a dream. His room, a proper human.</p>-->
+        <!--        </div>-->
+    </div>
+</main>
+<footer class="page-footer">
+    <small>© Copyright 2020. All rights reserved.</small>
+    <ul>
+        <li>
+            <a href="" target="_blank">
+                <i class="icon ion-logo-facebook"></i>
+            </a>
+        </li>
+        <li>
+            <a href="" target="_blank">
+                <i class="icon ion-logo-twitter"></i>
+            </a>
+        </li>
+        <li>
+            <a href="" target="_blank">
+                <i class="icon ion-logo-linkedin"></i>
+            </a>
+        </li>
+        <li>
+            <a href="" target="_blank">
+                <i class="icon ion-logo-github"></i>
+            </a>
+        </li>
+    </ul>
+</footer>
+
+
+<th:block class="basicScripts">
+    <script th:src="@{/webjars/jquery/jquery.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.js}"></script>
+    <script>
+        window.addEventListener("load", () => {
+            document.querySelector("body").classList.add("loaded");
+        });
+        (function () {
+            const logoutButton=document.querySelector(".cta-contact");
+            logoutButton.addEventListener("click", ()=>{
+                window.location.href="/logout";
+            })
+        })()
+    </script>
+</th:block>
+</body>
+</html>

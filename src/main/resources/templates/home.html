@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:replace="components :: .basicHeaders"></th:block>
+    <link rel="stylesheet" href="/css/animatedBasic.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <header th:replace="components :: header"></header>
+    <main class="page-main">
+        <div>
+            <div class="text-wrapper">
+                <h1>Quality restaurant</h1>
+            </div>
+            <div class="text-wrapper p-wrapper">
+                <p>The least is to give the best...</p>
+            </div>
+            <!--        <div class="text-wrapper p-wrapper">-->
+            <!--            <p>It wasn't a dream. His room, a proper human.</p>-->
+            <!--        </div>-->
+        </div>
+    </main>
+    <footer th:replace="components :: footer"></footer>
+
+
+</div>
+<th:block th:replace="components :: .basicScripts"></th:block>
+<script>
+</script>
+</body>
+</html>

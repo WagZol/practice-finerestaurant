@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:replace="components :: .basicHeaders"></th:block>
+    <link rel="stylesheet" href="/css/reservation.css"/>
+</head>
+<body>
+<div class="wrapper">
+    <header th:replace="components :: header"></header>
+    <main class="page-main">
+        <div class="reservation-wrapper">
+            <form th:action="@{/reservation}" th:object="${reservation}" method="post" id="reservation-form">
+                <div class="controls" id="reservation-form-elements">
+                    <div class="form-group" id="reservation-code-group">
+                        <label for="reservation-name" style="">Reservation name</label>
+                        <input type="text" id="reservation-name" name="name"
+                               th:classappend="${#fields.hasErrors('name')}? 'is-invalid':''"
+                               th:field="*{name}" placeholder="Enter the name to which you are reserve for"
+                               class="form-control">
+                        <div class="help-block with-errors"></div>
+                        <div class="invalid-feedback" th:each="error : ${#fields.errors('name')}"
+                             th:text="${error}">Validation error
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="reservation-date-code-group">
+                        <label for="reservation-date" style="">Reservation date</label>
+                        <input type="datetime-local" id="reservation-date" name="date" step="3600"
+                               th:classappend="${#fields.hasErrors('date')}? 'is-invalid':''"
+                               th:field="*{date}"
+                               class="form-control">
+                        <div class="help-block with-errors"></div>
+                        <div class="invalid-feedback" th:each="error : ${#fields.errors('date')}"
+                             th:text="${error}">Validation error
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="reservation-seats-code-group">
+                        <label for="reservation-seats" style="">Seats</label>
+                        <input type="number" id="reservation-seats"
+                               th:classappend="${#fields.hasErrors('seats')}? 'is-invalid':''"
+                               th:field="*{seats}" placeholder="Enter number of seats to reserve"
+                               class="form-control">
+                        <div class="help-block with-errors"></div>
+                        <div class="invalid-feedback" th:each="error : ${#fields.errors('seats')}"
+                             th:text="${error}">Validation error
+                        </div>
+                    </div>
+                    <button type="submit" id="coupon-code-btn" class="btn btn-primary">
+                        Find table
+                    </button>
+                    <span th:text="${message}">message text</span>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer th:replace="components :: footer"></footer>
+
+
+</div>
+<th:block th:replace="components :: .basicScripts"></th:block>
+<script type="module" src="/js/reservation.js"></script>
+<script>
+    document.querySelector("#reservation-date").min=new Date().toISOString().split("T")[0];
+</script>
+</body>
+</html>
