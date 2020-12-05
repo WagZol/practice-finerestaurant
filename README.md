@@ -17,3 +17,4 @@ This webpage was made for practice to a fictional restaurant, with specification
 - MySql
 - Spring MVC
 - JPA
+- Javascript ES6
